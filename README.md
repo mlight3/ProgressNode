@@ -1,9 +1,10 @@
 # ProgressNode
 A circular progress timer for SpriteKit games written in swift.
 
-## Usage
+## How shoud you use
 Just add the file to your project, and customize as you want.
 
+```swift
 let example             = ProgressNode()
 example.radius          = 20.0
 example.width           = 5.0
@@ -16,6 +17,10 @@ example.countdown(time: 10.0) { () -> Void in
 }
 
 self.addChild(example)
+```
+
+## How it looks like
+![alt tag](https://pbs.twimg.com/media/B9MxNVHIMAA1JCY.jpg)
 
 ## License
 WTFPL
