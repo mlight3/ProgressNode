@@ -22,6 +22,7 @@ public class ProgressNode : SKShapeNode
         static let backgroundColor : SKColor = SKColor.lightGrayColor()
         static let width : CGFloat           = 2.0
         static let progress : CGFloat        = 0.0
+        static let startAngle : CGFloat      = CGFloat(M_PI_2)
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +61,13 @@ public class ProgressNode : SKShapeNode
     
     //the current progress of the progress node end progress is 1.0 and start is 0.0
     public var progress: CGFloat = ProgressNode.Constants.progress {
+        didSet {
+            self.updateProgress(node: self.timeNode, progress: self.progress)
+        }
+    }
+
+    // the start angle of the progress node
+    public var startAngle: CGFloat = ProgressNode.Constants.startAngle {
         didSet {
             self.updateProgress(node: self.timeNode, progress: self.progress)
         }
@@ -124,10 +132,10 @@ public class ProgressNode : SKShapeNode
     private func updateProgress(#node: SKShapeNode, progress: CGFloat = 0.0) {
         let progress   = 1.0 - progress
         let startAngle = CGFloat(M_PI / 2.0)
-        let endAngle   = startAngle+progress*CGFloat(2.0*M_PI)
+        let endAngle   = self.startAngle + progress*CGFloat(2.0*M_PI)
         node.path      = UIBezierPath(arcCenter: CGPointZero,
                                          radius: self.radius,
-                                     startAngle: startAngle,
+                                     startAngle: self.startAngle,
                                        endAngle: endAngle,
                                       clockwise: true).CGPath
     }
