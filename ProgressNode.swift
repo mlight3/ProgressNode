@@ -23,6 +23,7 @@ public class ProgressNode : SKShapeNode
         static let width : CGFloat           = 2.0
         static let progress : CGFloat        = 0.0
         static let startAngle : CGFloat      = CGFloat(M_PI_2)
+        static private let actionKey         = "_progressNodeCountdownActionKey"
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,6 +153,8 @@ public class ProgressNode : SKShapeNode
     :param: callback An optional callback method (always called on main thread)
     */
     public func countdown(time: NSTimeInterval = 1.0, callback: ((Void) -> Void)?) {
+        self.stopCountdown()
+
         self.runAction(SKAction.customActionWithDuration(time, actionBlock: {(node: SKNode!, elapsedTime: CGFloat) -> Void in
             self.progress = elapsedTime / CGFloat(time)
             if let cb = callback {
@@ -159,6 +162,10 @@ public class ProgressNode : SKShapeNode
                     cb()
                 });
             }
-        }))
+        }), withKey:ProgressNode.Constants.actionKey)
+    }
+    
+    public func stopCountdown() {
+        self.removeActionForKey(ProgressNode.Constants.actionKey)
     }
 }
