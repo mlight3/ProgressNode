@@ -23,6 +23,7 @@ public class ProgressNode : SKShapeNode
         static let width : CGFloat           = 2.0
         static let progress : CGFloat        = 0.0
         static let startAngle : CGFloat      = CGFloat(M_PI_2)
+        static let clockwise : Bool          = true
         static private let actionKey         = "_progressNodeCountdownActionKey"
     }
     
@@ -73,6 +74,15 @@ public class ProgressNode : SKShapeNode
             self.updateProgress(node: self.timeNode, progress: self.progress)
         }
     }
+    
+    // the clockwise of the progress path
+    public var clockwise: Bool = ProgressNode.Constants.clockwise {
+        didSet {
+            self.updateProgress(node: self.timeNode, progress: self.progress)
+            self.updateProgress(node: self)
+        }
+    }
+    
     
     private let timeNode = SKShapeNode()
 
@@ -133,12 +143,15 @@ public class ProgressNode : SKShapeNode
     private func updateProgress(#node: SKShapeNode, progress: CGFloat = 0.0) {
         let progress   = 1.0 - progress
         let startAngle = CGFloat(M_PI / 2.0)
-        let endAngle   = self.startAngle + progress*CGFloat(2.0*M_PI)
+        let endAngle   = self.clockwise
+            ? self.startAngle + progress * CGFloat(2.0*M_PI)
+            : self.startAngle - progress * CGFloat(2.0*M_PI)
+        
         node.path      = UIBezierPath(arcCenter: CGPointZero,
                                          radius: self.radius,
                                      startAngle: self.startAngle,
                                        endAngle: endAngle,
-                                      clockwise: true).CGPath
+                                      clockwise: self.clockwise).CGPath
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
